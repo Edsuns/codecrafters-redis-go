@@ -28,8 +28,8 @@ func main() {
 	}
 
 	req := ReadString(conn)
-	if req == "+PING\r\n" {
-		WriteString(conn, "+PONG\r\n")
+	if req == "+ping\r\n" {
+		WriteString(conn, "+pong\r\n")
 	}
 }
 
