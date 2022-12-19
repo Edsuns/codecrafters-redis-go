@@ -41,7 +41,7 @@ func ReadString(conn net.Conn) string {
 	)
 	const bufSize = 2048
 	var buf [bufSize]byte
-	for p = 0; p < bufSize && buf[p-1] != '\n'; p += n {
+	for p = 0; p < bufSize && (p < 1 || buf[p-1] != '\n'); p += n {
 		n, err = conn.Read(buf[p:])
 		if err != nil {
 			panic(err)
