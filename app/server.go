@@ -28,10 +28,10 @@ func main() {
 	}
 
 	//req := ReadString(conn)
-	//if req == "+ping\r\n" {
-	//	WriteString(conn, "+pong\r\n")
+	//if req == "+PING\r\n" {
+	//	WriteString(conn, "+PONG\r\n")
 	//}
-	WriteString(conn, "+pong\r\n")
+	WriteString(conn, "+PONG\r\n")
 }
 
 func ReadString(conn net.Conn) string {
