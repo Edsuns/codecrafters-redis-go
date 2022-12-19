@@ -27,10 +27,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	req := ReadString(conn)
-	if req == "+ping\r\n" {
-		WriteString(conn, "+pong\r\n")
-	}
+	//req := ReadString(conn)
+	//if req == "+ping\r\n" {
+	//	WriteString(conn, "+pong\r\n")
+	//}
+	WriteString(conn, "+pong\r\n")
 }
 
 func ReadString(conn net.Conn) string {
@@ -39,8 +40,9 @@ func ReadString(conn net.Conn) string {
 		p   int
 		err error
 	)
-	var buf [2048]byte
-	for p = 0; p < len(buf) && buf[p] != '\n'; p += n {
+	const bufSize = 2048
+	var buf [bufSize]byte
+	for p = 0; p < bufSize && buf[p] != '\n'; p += n {
 		n, err = conn.Read(buf[p:])
 		if err != nil {
 			panic(err)
