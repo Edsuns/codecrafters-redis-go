@@ -27,11 +27,12 @@ func main() {
 		os.Exit(1)
 	}
 
-	//req := ReadString(conn)
-	//if req == "+PING\r\n" {
-	//	WriteString(conn, "+PONG\r\n")
-	//}
-	WriteString(conn, "+PONG\r\n")
+	for {
+		req := ReadString(conn)
+		if req == "+PING\r\n" {
+			WriteString(conn, "+PONG\r\n")
+		}
+	}
 }
 
 func ReadString(conn net.Conn) string {
