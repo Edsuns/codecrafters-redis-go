@@ -13,13 +13,12 @@ func main() {
 	// You can use print statements as follows for debugging, they'll be visible when running tests.
 	fmt.Println("Logs from your program will appear here!")
 
-	// Uncomment this block to pass the first stage
-
 	l, err := net.Listen("tcp", "0.0.0.0:6379")
 	if err != nil {
 		fmt.Println("Failed to bind to port 6379")
 		os.Exit(1)
 	}
+
 	var conn net.Conn
 	for {
 		conn, err = l.Accept()
@@ -33,13 +32,24 @@ func main() {
 }
 
 func handle(conn net.Conn) {
+	var (
+		_   *string
+		err error
+	)
 	for {
-		ReadString(conn)
-		WriteString(conn, "+PONG\r\n")
+		_, err = ReadString(conn)
+		if err == nil {
+			err = WriteString(conn, "+PONG\r\n")
+		}
+
+		if err != nil {
+			fmt.Println("An error occurred when handling conn: ", err.Error())
+			break
+		}
 	}
 }
 
-func ReadString(conn net.Conn) string {
+func ReadString(conn net.Conn) (*string, error) {
 	var (
 		n   int
 		p   int
@@ -50,13 +60,14 @@ func ReadString(conn net.Conn) string {
 	for p = 0; p < bufSize && (p < 1 || buf[p-1] != '\n'); p += n {
 		n, err = conn.Read(buf[p:])
 		if err != nil {
-			panic(err)
+			return nil, err
 		}
 	}
-	return string(buf[:p])
+	str := string(buf[:p])
+	return &str, nil
 }
 
-func WriteString(conn net.Conn, str string) {
+func WriteString(conn net.Conn, str string) error {
 	var (
 		n   int
 		p   int
@@ -66,7 +77,8 @@ func WriteString(conn net.Conn, str string) {
 	for p = 0; p < len(buf); p += n {
 		n, err = conn.Write(buf[p:])
 		if err != nil {
-			panic(err)
+			return err
 		}
 	}
+	return nil
 }
